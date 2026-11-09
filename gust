@@ -166,7 +166,7 @@ docker rm "$cid" >/dev/null
 chmod +x "$GUST_DIR/gust"
 
 say "Registry accounts"
-htp() { docker run --rm httpd:2.4-alpine htpasswd -nbB "$1" "$2" | head -n1; }
+htp() { docker run --rm httpd:2.4-alpine htpasswd -nbB "$1" "$2" | sed -n '1p'; }
 {
   htp ci "$(sed -n 's/^REGISTRY_CI_PASSWORD=//p' "$GUST_DIR/.env")"
   htp gust "$(sed -n 's/^REGISTRY_PULL_PASSWORD=//p' "$GUST_DIR/.env")"

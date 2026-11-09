@@ -261,9 +261,32 @@ Unit=gust-version-check.service
 [Install]
 WantedBy=timers.target
 UNIT
+    # Samples CPU, RAM, disk and containers for the Server page every minute.
+    cat > /etc/systemd/system/gust-metrics.service <<UNIT
+[Unit]
+Description=Gust: sample the host for the Server page
+
+[Service]
+Type=oneshot
+Environment=GUST_DIR=$GUST_DIR
+ExecStart=$GUST_DIR/gust sample
+UNIT
+    cat > /etc/systemd/system/gust-metrics.timer <<UNIT
+[Unit]
+Description=Gust: sample the host every minute
+
+[Timer]
+OnBootSec=1min
+OnUnitActiveSec=1min
+Unit=gust-metrics.service
+
+[Install]
+WantedBy=timers.target
+UNIT
     systemctl daemon-reload
-    systemctl enable --now gust-requests.path gust-version-check.timer
+    systemctl enable --now gust-requests.path gust-version-check.timer gust-metrics.timer
     "$GUST_DIR/gust" version-check || warn "The first version check failed. It runs again in 10 minutes."
+    "$GUST_DIR/gust" sample || warn "The first host sample failed. It runs again in a minute."
   fi
 fi
 

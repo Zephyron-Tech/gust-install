@@ -86,6 +86,10 @@ if [ -n "$GITHUB_APP_ID" ]; then
     GITHUB_APP_KEY="$(existing GITHUB_APP_PRIVATE_KEY)"
   fi
 fi
+# Public IP of this server, shown in Domains (A record target). Kept if already set.
+GUST_SERVER_IP_DEFAULT="$(existing GUST_SERVER_IP)"
+[ -n "$GUST_SERVER_IP_DEFAULT" ] || GUST_SERVER_IP_DEFAULT="$(curl -4 -fsS --max-time 5 https://ifconfig.me 2>/dev/null || true)"
+ask GUST_SERVER_IP "Public IP of this server" "$GUST_SERVER_IP_DEFAULT"
 ask BREAK_GLASS_EMAIL "Break-glass admin e-mail" "$(existing BREAK_GLASS_EMAIL)"
 BREAK_GLASS_EMAIL="${BREAK_GLASS_EMAIL:-admin@$GUST_DOMAIN}"
 
@@ -144,6 +148,7 @@ cat > "$GUST_DIR/.env" <<EOF
 GUST_IMAGE=$GUST_IMAGE
 GUST_DOMAIN=$GUST_DOMAIN
 REGISTRY_DOMAIN=$REGISTRY_DOMAIN
+GUST_SERVER_IP=$GUST_SERVER_IP
 ACME_EMAIL=$ACME_EMAIL
 
 POSTGRES_PASSWORD=${pg:-$(randpw 32)}

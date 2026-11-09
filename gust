@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Gust installer. Published at https://get.zephyron.tech/gust
 #
-#   curl -fsSL https://get.zephyron.tech/gust | sudo bash
+#   sudo bash -c "$(curl -fsSL https://get.zephyron.tech/gust)"
 #
 # Only the script is public. The Gust image stays private: the installer asks
 # for a GitHub token with read:packages to pull it.

@@ -170,6 +170,10 @@ GITHUB_ALLOWED_OWNERS=$(existing GITHUB_ALLOWED_OWNERS | grep . || echo Zephyron
 
 BREAK_GLASS_EMAIL=$BREAK_GLASS_EMAIL
 BREAK_GLASS_PASSWORD=${bg:-$(randpw 24)}
+
+# Optional alerts, set by hand in this file. Kept across reruns.
+DISCORD_WEBHOOK_URL=$(existing DISCORD_WEBHOOK_URL)
+HEARTBEAT_URL=$(existing HEARTBEAT_URL)
 EOF
 chmod 600 "$GUST_DIR/.env"
 
